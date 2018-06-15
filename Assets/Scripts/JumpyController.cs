@@ -59,12 +59,13 @@ public class JumpyController : MonoBehaviour
 		if (moveState != MovementState.Airborne)
 		{
 			float moveSpeed = Acceleration;
+			float tempMaxVel = MaxVelocity;
 
 			//Scale speed if shift is held down
 			if (Input.GetKey(KeyCode.LeftShift) && horizontal != 0)
 			{
 				moveState = MovementState.Running;
-				moveSpeed *= 1.5f;
+				tempMaxVel *= 2f;
 			}
 			else
 			{
@@ -72,7 +73,7 @@ public class JumpyController : MonoBehaviour
 			}
 
 			//Make sure character is not travelling too fast
-			if (Math.Abs(rb.velocity.x) < MaxVelocity)
+			if (Math.Abs(rb.velocity.x) < tempMaxVel)
 			{
 				//Update horizontal force to character
 				rb.AddForce(new Vector3(horizontal * moveSpeed, 0, 0));
@@ -125,7 +126,7 @@ public class JumpyController : MonoBehaviour
 	private int VerticalMovement()
 	{
 		float AxisVertical = Input.GetAxis("Vertical");
-		if (AxisVertical > 0)
+		if (AxisVertical > 0 || Input.GetKey(KeyCode.Space))
 		{
 			return MovementVal[MovementInput.Jump];
 		}
