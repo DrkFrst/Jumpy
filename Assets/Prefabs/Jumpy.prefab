@@ -98,7 +98,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 104
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!114 &114691281674701532
 MonoBehaviour:
@@ -120,7 +120,7 @@ CapsuleCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1093642487163170}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 4c8f46ed166632c4ca26b27c9455284a, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
