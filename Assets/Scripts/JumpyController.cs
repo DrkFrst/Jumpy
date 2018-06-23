@@ -11,6 +11,8 @@ public class JumpyController : MonoBehaviour
 	public int JumpPower;
 	public int MaxVelocity;
 
+	private bool isJumping;
+
 	//Movement state of character (can only be one)
 	private enum PlayerState { Grounded, Idle, Airborne, Stunned, Crouching };
 
@@ -70,14 +72,9 @@ public class JumpyController : MonoBehaviour
 			return;
 		}
 
-
 		float moveSpeed = Acceleration;
 		float tempMaxVel = MaxVelocity;
 
-		if (moveState == PlayerState.Airborne)
-		{
-			moveSpeed /= 2;
-		}
 		//Scale speed if shift is held down
 		if (Input.GetKey(KeyCode.LeftShift) && horizontal != 0)
 		{
@@ -92,9 +89,10 @@ public class JumpyController : MonoBehaviour
 
 
 		//Determine and apply vertical input
-		if (vertical == 1 && moveState != PlayerState.Airborne && Math.Abs(rb.velocity.y) < tempMaxVel)
+		if (vertical == 1 && !isJumping && moveState != PlayerState.Airborne && Math.Abs(rb.velocity.y) < tempMaxVel)
 		{
 			Jump();
+			isJumping = true;
 		}
 		else if (vertical == -1)
 		{
@@ -102,9 +100,13 @@ public class JumpyController : MonoBehaviour
 		}
 	}
 
-	void OnCollisionEnter(Collision other)
+	void OnCollisionStay(Collision other)
 	{
 		moveState = PlayerState.Grounded;
+	}
+	void OnCollisionEnter(Collision other)
+	{
+		isJumping = false;
 	}
 
 	void OnCollisionExit(Collision other)
