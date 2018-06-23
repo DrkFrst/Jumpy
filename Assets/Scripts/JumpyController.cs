@@ -55,6 +55,16 @@ public class JumpyController : MonoBehaviour
 	 */
 	private void Movement(int horizontal, int vertical)
 	{
+		if (rb.velocity == Vector3.zero)
+		{
+			moveState = MovementState.Idle;
+		}
+		//Idle case
+		if (horizontal == 0 && vertical == 0)
+		{
+			return;
+		}
+
 		//If user is on the ground
 		if (moveState != MovementState.Airborne)
 		{
@@ -80,19 +90,13 @@ public class JumpyController : MonoBehaviour
 			}
 
 			//Determine and apply vertical input
-			if (vertical == 1)
+			if (vertical == 1 && Math.Abs(rb.velocity.y) < tempMaxVel)
 			{
 				Jump();
 			}
 			else if (vertical == -1)
 			{
 				Crouch();
-			}
-
-			//Idle case
-			if (horizontal == 0 && vertical == 0)
-			{
-				moveState = MovementState.Idle;
 			}
 		}
 	}
@@ -110,6 +114,7 @@ public class JumpyController : MonoBehaviour
 	private void Jump()
 	{
 		rb.AddForce(new Vector3(0, 1 * JumpPower, 0));
+		moveState = MovementState.Airborne;
 	}
 
 	//Purely vertical boost
