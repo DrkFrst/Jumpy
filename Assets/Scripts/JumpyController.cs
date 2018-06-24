@@ -11,8 +11,10 @@ public class JumpyController : MonoBehaviour
 	public int JumpPower;
 	public int MaxVelocity;
 
+	private bool isJumping;
+
 	//Movement state of character (can only be one)
-	private enum MovementState { Running, Walking, Idle, Airborne, Stunned, Crouching };
+	private enum PlayerState { Grounded, Idle, Airborne, Stunned, Crouching };
 
 	//Possible movement inputs
 	private enum MovementInput { Left, Right, Jump, Crouch, Idle };
@@ -27,14 +29,14 @@ public class JumpyController : MonoBehaviour
 	};
 
 	private Rigidbody rb;
-	private MovementState moveState;
+	private PlayerState moveState;
 
 
 	// Use this for initialization
 	void Start()
 	{
 		rb = GetComponent<Rigidbody>();
-		moveState = MovementState.Airborne;
+		moveState = PlayerState.Airborne;
 	}
 
 	// Update is called once per frame
@@ -46,6 +48,7 @@ public class JumpyController : MonoBehaviour
 	void FixedUpdate()
 	{
 		Movement(HorizontalMovement(), VerticalMovement());
+		Debug.Log(moveState);
 	}
 
 	/**
@@ -55,9 +58,13 @@ public class JumpyController : MonoBehaviour
 	 */
 	private void Movement(int horizontal, int vertical)
 	{
+		if (horizontal == 0 && moveState == PlayerState.Grounded)
+		{
+			rb.velocity = new Vector3(0, rb.velocity.y, 0);
+		}
 		if (rb.velocity == Vector3.zero)
 		{
-			moveState = MovementState.Idle;
+			moveState = PlayerState.Grounded;
 		}
 		//Idle case
 		if (horizontal == 0 && vertical == 0)
@@ -65,56 +72,52 @@ public class JumpyController : MonoBehaviour
 			return;
 		}
 
-		//If user is on the ground
-		if (moveState != MovementState.Airborne)
+		float moveSpeed = Acceleration;
+		float tempMaxVel = MaxVelocity;
+
+		//Scale speed if shift is held down
+		if (Input.GetKey(KeyCode.LeftShift) && horizontal != 0)
 		{
-			float moveSpeed = Acceleration;
-			float tempMaxVel = MaxVelocity;
+			tempMaxVel *= 2f;
+		}
+		//Make sure character is not travelling too fast
+		if (Math.Abs(rb.velocity.x) < tempMaxVel)
+		{
+			//Update horizontal force to character
+			rb.AddForce(new Vector3(horizontal * moveSpeed, 0, 0));
+		}
 
-			//Scale speed if shift is held down
-			if (Input.GetKey(KeyCode.LeftShift) && horizontal != 0)
-			{
-				moveState = MovementState.Running;
-				tempMaxVel *= 2f;
-			}
-			else
-			{
-				moveState = MovementState.Walking;
-			}
 
-			//Make sure character is not travelling too fast
-			if (Math.Abs(rb.velocity.x) < tempMaxVel)
-			{
-				//Update horizontal force to character
-				rb.AddForce(new Vector3(horizontal * moveSpeed, 0, 0));
-			}
-
-			//Determine and apply vertical input
-			if (vertical == 1 && Math.Abs(rb.velocity.y) < tempMaxVel)
-			{
-				Jump();
-			}
-			else if (vertical == -1)
-			{
-				Crouch();
-			}
+		//Determine and apply vertical input
+		if (vertical == 1 && !isJumping && moveState != PlayerState.Airborne && Math.Abs(rb.velocity.y) < tempMaxVel)
+		{
+			Jump();
+			isJumping = true;
+		}
+		else if (vertical == -1)
+		{
+			Crouch();
 		}
 	}
 
+	void OnCollisionStay(Collision other)
+	{
+		moveState = PlayerState.Grounded;
+	}
 	void OnCollisionEnter(Collision other)
 	{
-		moveState = MovementState.Idle;
+		isJumping = false;
 	}
 
 	void OnCollisionExit(Collision other)
 	{
-		moveState = MovementState.Airborne;
+		moveState = PlayerState.Airborne;
 	}
 
 	private void Jump()
 	{
 		rb.AddForce(new Vector3(0, 1 * JumpPower, 0));
-		moveState = MovementState.Airborne;
+		moveState = PlayerState.Airborne;
 	}
 
 	//Purely vertical boost
