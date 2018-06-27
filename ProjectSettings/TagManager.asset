@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
+  - Wall
+  - Platform
+  - Roof
+  - Door
   layers:
   - Default
   - TransparentFX
@@ -14,8 +18,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Player
+  - Bullet
   - 
   - 
   - 
