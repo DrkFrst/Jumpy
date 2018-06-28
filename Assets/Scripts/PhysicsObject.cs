@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class PhysicsObject : MonoBehaviour
 {
-	public float gravityModifier = 1f;
-
+	public float GravityModifier = 1f;
+	public int MaxVelocity = 10;
 	protected Vector3 targetVelocity;
-	protected Vector3 velocity;
+	protected Vector3 jumpVelocity;
 	protected Rigidbody rb;
 
 	void OnEnable()
@@ -32,7 +32,7 @@ public class PhysicsObject : MonoBehaviour
 		Movement();
 	}
 
-	bool IsGrounded()
+	public bool IsGrounded()
 	{
 		Vector3 down = transform.TransformDirection(Vector3.down);
 		float size = transform.GetComponent<Collider>().bounds.extents.y;
@@ -50,7 +50,22 @@ public class PhysicsObject : MonoBehaviour
 
 	public void Movement()
 	{
-		rb.AddForce(Physics.gravity * gravityModifier);
-		rb.AddForce(targetVelocity, ForceMode.Impulse);
+
+		rb.AddForce(Physics.gravity * GravityModifier);
+
+		Debug.Log(rb.velocity.x);
+
+		if (Mathf.Abs(rb.velocity.x) <= MaxVelocity)
+		{
+			if (rb.velocity.x <= MaxVelocity / 2)
+			{
+				rb.AddForce(new Vector3(targetVelocity.x * 3, 0f, 0f));
+			}
+			else
+			{
+				rb.AddForce(new Vector3(targetVelocity.x, 0f, 0f));
+			}
+		}
+		rb.AddForce(new Vector3(0f, targetVelocity.y, 0f), ForceMode.Impulse);
 	}
 }
