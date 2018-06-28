@@ -6,10 +6,9 @@ public class PhysicsObject : MonoBehaviour
 {
 	public float gravityModifier = 1f;
 
+	protected Vector3 targetVelocity;
 	protected Vector3 velocity;
 	protected Rigidbody rb;
-	protected ContactFilter2D contactFilter;
-	protected const float minMoveDistance = 0.001f;
 
 	void OnEnable()
 	{
@@ -25,29 +24,33 @@ public class PhysicsObject : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-
+		ComputeMovement();
 	}
 
 	void FixedUpdate()
 	{
-		velocity += gravityModifier * Physics.gravity * Time.deltaTime;
-
-		Vector3 deltaPos = velocity * Time.deltaTime;
-
-		Vector3 move = Vector3.up * deltaPos.y;
-
-		Movement(move);
+		Movement();
 	}
 
-	void Movement(Vector3 move)
+	bool IsGrounded()
 	{
-		float distance = move.magnitude;
-
-		if (distance > minMoveDistance)
+		Vector3 down = transform.TransformDirection(Vector3.down);
+		float size = transform.GetComponent<Collider>().bounds.extents.y;
+		if (Physics.Raycast(transform.position, down, size))
 		{
-
+			return true;
 		}
+		return false;
+	}
 
-		rb.position = rb.position + move;
+	protected virtual void ComputeMovement()
+	{
+
+	}
+
+	public void Movement()
+	{
+		rb.AddForce(Physics.gravity * gravityModifier);
+		rb.AddForce(targetVelocity, ForceMode.Impulse);
 	}
 }

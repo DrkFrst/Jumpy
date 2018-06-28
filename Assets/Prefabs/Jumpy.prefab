@@ -22,8 +22,8 @@ GameObject:
   - component: {fileID: 33833341831619122}
   - component: {fileID: 136799772324155360}
   - component: {fileID: 23438260121656646}
-  - component: {fileID: 114691281674701532}
   - component: {fileID: 54097075765837050}
+  - component: {fileID: 114415386239000042}
   m_Layer: 0
   m_Name: Jumpy
   m_TagString: Untagged
@@ -100,7 +100,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 120
   m_CollisionDetection: 0
---- !u!114 &114691281674701532
+--- !u!114 &114415386239000042
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -108,12 +108,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1093642487163170}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c8b08b24bbc3a142bc0fa669800d52f, type: 3}
+  m_Script: {fileID: 11500000, guid: fd206a77a27459c4d82f79693d4f4fe6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Acceleration: 10
-  JumpPower: 300
-  MaxVelocity: 2
+  gravityModifier: 1
 --- !u!136 &136799772324155360
 CapsuleCollider:
   m_ObjectHideFlags: 1
