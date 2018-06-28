@@ -6,31 +6,29 @@ public class PhysicsObject : MonoBehaviour
 {
 	public float gravityModifier = 1f;
 
+	private bool isGrounded;
+
+	protected Vector3 targetVelocity;
 	protected Vector3 velocity;
 	protected Rigidbody rb;
-	protected ContactFilter2D contactFilter;
 	protected const float minMoveDistance = 0.001f;
-
-	void OnEnable()
-	{
-		rb = GetComponent<Rigidbody>();
-	}
 
 	// Use this for initialization
 	void Start()
 	{
-
+		rb = GetComponent<Rigidbody>();
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
-
 	}
 
 	void FixedUpdate()
 	{
-		velocity += gravityModifier * Physics.gravity * Time.deltaTime;
+		velocity.x = targetVelocity.x;
+
+		Vector3 moveOnGround = new Vector3();
 
 		Vector3 deltaPos = velocity * Time.deltaTime;
 
@@ -39,15 +37,25 @@ public class PhysicsObject : MonoBehaviour
 		Movement(move);
 	}
 
-	void Movement(Vector3 move)
+	void OnCollisionEnter(Collision col)
 	{
-		float distance = move.magnitude;
-
-		if (distance > minMoveDistance)
+		if (col.gameObject.tag == "Ground")
 		{
-
+			isGrounded = true;
 		}
+	}
 
-		rb.position = rb.position + move;
+	void OnCollisionExit(Collision col)
+	{
+		if (col.gameObject.tag == "Ground")
+		{
+			isGrounded = false;
+		}
+	}
+
+	public void Movement(Vector3 move)
+	{
+		rb.AddForce(Physics.gravity * gravityModifier);
+
 	}
 }
