@@ -297,6 +297,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &139463672 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1093642487163170, guid: bccdd711dd8ef1746b72588222e51c64,
+    type: 2}
+  m_PrefabInternal: {fileID: 1855720949}
+--- !u!114 &139463674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 139463672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd206a77a27459c4d82f79693d4f4fe6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gravityModifier: 1
 --- !u!1 &264996272
 GameObject:
   m_ObjectHideFlags: 0
@@ -659,7 +676,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1013417437}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.656, y: -4.066, z: -0.08984375}
+  m_LocalPosition: {x: 0.656, y: -4.066, z: 0}
   m_LocalScale: {x: 1, y: 2.7448182, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -951,6 +968,9 @@ MonoBehaviour:
   Acceleration: 50
   JumpPower: 300
   MaxVelocity: 4
+  isJumping: 0
+  rb: {fileID: 0}
+  moveState: 0
 --- !u!23 &1489360622
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1210,7 +1230,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4461348887326974, guid: bccdd711dd8ef1746b72588222e51c64, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -3.774
+      value: 5.07
       objectReference: {fileID: 0}
     - target: {fileID: 4461348887326974, guid: bccdd711dd8ef1746b72588222e51c64, type: 2}
       propertyPath: m_LocalPosition.z
@@ -1236,30 +1256,8 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4461348887326974, guid: bccdd711dd8ef1746b72588222e51c64, type: 2}
-      propertyPath: m_LocalScale.x
-      value: 0.8392916
-      objectReference: {fileID: 0}
-    - target: {fileID: 4461348887326974, guid: bccdd711dd8ef1746b72588222e51c64, type: 2}
-      propertyPath: m_LocalScale.y
-      value: 0.7130208
-      objectReference: {fileID: 0}
-    - target: {fileID: 136799772324155360, guid: bccdd711dd8ef1746b72588222e51c64,
-        type: 2}
-      propertyPath: m_Radius
-      value: 0.4144652
-      objectReference: {fileID: 0}
-    - target: {fileID: 136799772324155360, guid: bccdd711dd8ef1746b72588222e51c64,
-        type: 2}
-      propertyPath: m_Height
-      value: 1.9999998
-      objectReference: {fileID: 0}
-    - target: {fileID: 136799772324155360, guid: bccdd711dd8ef1746b72588222e51c64,
-        type: 2}
-      propertyPath: m_Center.x
-      value: 0.0021683155
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 114415386239000042, guid: bccdd711dd8ef1746b72588222e51c64, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: bccdd711dd8ef1746b72588222e51c64, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &1979396119
